@@ -48,9 +48,9 @@ func main4() {
 	var s4 []int
 	fmt.Println(s4)
 	if s4 == nil {
-		fmt.Println("nil!！")
+		fmt.Println("nil!!")
 	} else {
-		fmt.Println("not nil!！")
+		fmt.Println("not nil!!")
 	}
 
 	// 切片copy
