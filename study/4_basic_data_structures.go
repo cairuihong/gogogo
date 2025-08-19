@@ -1,4 +1,4 @@
-package main
+package study
 
 import "fmt"
 
@@ -21,7 +21,7 @@ var s1 = []int{1, 2, 3}
 // 创建一个长度为3 ，容量为5 的切片，默认为[0,0,0]
 var s3 = make([]int, 3, 5)
 
-func main4() {
+func case_4() {
 
 	//数组
 	fmt.Println(numbers1)

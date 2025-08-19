@@ -1,4 +1,4 @@
-package main
+package study
 
 func main2() {
 	//	sick := false
