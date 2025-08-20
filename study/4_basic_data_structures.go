@@ -125,4 +125,6 @@ func BasicDataStructuresCase() {
 	user2 := User{"Bob", "alice@example.com", 1, false}
 	fmt.Println(user2)
 
+	// 访问结构体字段 , 使用点号 . 操作符 [结构体.成员名]
+	fmt.Println(user1.Email)
 }
