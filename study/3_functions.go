@@ -23,7 +23,7 @@ func calculator(a, b int) (mul int, div int) {
 	return // 裸返回
 }
 
-func main3() {
+func FunctionsCase() {
 	a := 100
 	b := 200
 	ret := max(a, b)

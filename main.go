@@ -1,8 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"gogogo/study"
+)
 
 func main() {
-	fmt.Println("Hello, World!")
+	fmt.Println("Hello, 执行main文件")
+	// study.HelloCase()
+	// study.ControlFlowCase()
+	// study.FunctionsCase()
+	study.BasicDataStructuresCase()
 
 }

@@ -1,6 +1,8 @@
 package study
 
-func main2() {
+import "fmt"
+
+func ControlFlowCase() {
 	//	sick := false
 	//	if sick {
 	//		fmt.Println("call the doctor")
@@ -79,10 +81,10 @@ func main2() {
 	//}
 
 	//用for充当while循环
-	//n := 2
-	//for n < 5 {
-	//	n *= 2
-	//}
-	//fmt.Println(n)
+	n := 2
+	for n < 5 {
+		n *= 2
+	}
+	fmt.Println(n)
 
 }

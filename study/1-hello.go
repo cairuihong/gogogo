@@ -1,4 +1,4 @@
-package main
+package study
 
 import "fmt"
 
@@ -6,7 +6,7 @@ var ago int
 var name string = "Alice"
 var city = "New York"
 
-func main1() {
+func HelloCase() {
 	//school := "清华大学"
 	fmt.Println("请输入你的姓名：")
 	fmt.Scanln(&name)
