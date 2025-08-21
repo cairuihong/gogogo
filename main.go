@@ -10,6 +10,7 @@ func main() {
 	// study.HelloCase()
 	// study.ControlFlowCase()
 	// study.FunctionsCase()
-	study.BasicDataStructuresCase()
+	// study.BasicDataStructuresCase()
+	study.ErrorHandlingCase()
 
 }
