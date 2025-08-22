@@ -11,6 +11,7 @@ func main() {
 	// study.ControlFlowCase()
 	// study.FunctionsCase()
 	// study.BasicDataStructuresCase()
-	study.ErrorHandlingCase()
+	// study.ErrorHandlingCase()
+	study.PointerCase()
 
 }
