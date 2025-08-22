@@ -1,4 +1,4 @@
-package study
+package study_case
 
 import "fmt"
 
@@ -55,6 +55,30 @@ func getSequence() func() int {
 	}
 }
 
+/*
+	递归函数
+		函数直接或间接调用自身
+*/
+
+// 递归--计算阶乘函数
+func factorial(n int) int {
+	if n <= 1 {
+		return 1
+	}
+	return n * factorial(n-1)
+}
+
+// 递归-输出斐波那契数列
+
+func fibonacci(n int) int {
+	if n <= 0 {
+		return 0
+	} else if n == 1 {
+		return 1
+	}
+	return fibonacci(n-1) + fibonacci(n-2)
+}
+
 func FunctionsCase() {
 	a := 100
 	b := 200
@@ -109,15 +133,24 @@ func FunctionsCase() {
 	calculate := func(operator func(int, int) int, x, y int) int {
 		return operator(x, y)
 	}
-	
+
 	// 使用calculate函数执行加法运算，计算3+4的值
 	sum := calculate(add, 3, 4)
 	fmt.Printf("计算3+4的值:%d\n", sum)
-
 
 	// 也可以直接在函数调用中定义匿名函数
 	difference := calculate(func(a, b int) int {
 		return a - b
 	}, 5, 2)
 	fmt.Printf("计算5-2的值:%d\n", difference)
+
+	// 递归函数-调用计算阶乘函数
+	fmt.Printf("5的阶乘是: %d\n", factorial(5))
+
+	//  递归函数-调用斐波那契数列fibonacci
+	fmt.Println("斐波那契数列")
+	for i := 0; i < 10; i++ {
+		fmt.Printf("%d ", fibonacci(i))
+	}
+
 }
