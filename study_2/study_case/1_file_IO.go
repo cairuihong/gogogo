@@ -26,6 +26,7 @@ func FileCreate() {
 /*
 文件的打开和关闭
 打开： os.Open（）
+	当需要指定打开模式和权限时，应使用os.OpenFile函数
 关闭： file.Close()
 */
 
