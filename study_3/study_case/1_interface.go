@@ -53,6 +53,7 @@ func (r Rectangle) Perimeter() float64 {
 
 func InterfaceCase() {
 	c := Circle{Radius: 5}
+
 	var s1 Shape = c
 	// 接口变量 s 可以储存实现了 Shape 接口的任何值
 
