@@ -14,7 +14,7 @@ goroutine 语法格式：
 */
 
 func SayHello() {
-	for i := 0; i <= 5; i++ {
+	for i := 0; i <= 1000; i++ {
 		fmt.Println("Hello Goroutine", i)
 		time.Sleep(100 * time.Millisecond) // 睡眠100毫秒
 	}
