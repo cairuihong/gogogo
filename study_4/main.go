@@ -8,5 +8,6 @@ func main() {
 	// study_case.ChannelSelectCase()
 	// study_case.WaitGroupCase()
 	// study_case.RuntimeGoschedCase()
-	study_case.RuntimeGoexitCase()
+	// study_case.RuntimeGoexitCase()
+	study_case.RuntimeGOMAXPROCSCase()
 }
