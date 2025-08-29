@@ -52,6 +52,9 @@ func fibonacci(n int, c chan int) {
 	close(c) // 关闭通道，表示不再发送数据
 }
 
+
+
+
 func ChannelCase() {
 
 	/*channel 基础案例*/

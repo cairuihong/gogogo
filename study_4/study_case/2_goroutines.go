@@ -24,7 +24,7 @@ func GoroutineCase() {
 	go SayHello()
 	for i := 0; i <= 5; i++ {
 		fmt.Println("Hello Main", i)
-		time.Sleep(100 * time.Millisecond) // 睡眠100毫秒
+		time.Sleep(100 * time.Millisecond) // 睡眠100毫秒 这里如果没有等待，会因为主协程执行完了就结束程序，来不及执行go hello创建的协程
 	}
 
 }
