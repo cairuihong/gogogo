@@ -9,5 +9,6 @@ func main() {
 	// study_case.WaitGroupCase()
 	// study_case.RuntimeGoschedCase()
 	// study_case.RuntimeGoexitCase()
-	study_case.RuntimeGOMAXPROCSCase()
+	// study_case.RuntimeGOMAXPROCSCase()
+	study_case.WorderPoolCase()
 }
