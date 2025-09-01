@@ -10,5 +10,8 @@ func main() {
 	// study_case.RuntimeGoschedCase()
 	// study_case.RuntimeGoexitCase()
 	// study_case.RuntimeGOMAXPROCSCase()
-	study_case.WorderPoolCase()
+	// study_case.WorderPoolCase()
+	// study_case.TimerCase()
+	// study_case.SyncMutexCase()
+	study_case.WRLockCase()
 }
