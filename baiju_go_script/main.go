@@ -1,10 +1,9 @@
 package main
 
-import (
-	"gogogo/baiju_go_script/baiju_order"
-)
+import "gogogo/baiju_go_script/baiju_order"
 
 func main() {
 
 	baiju_order.GeneralOrderCommit()
+	// public_func.PublicDataCase()
 }
