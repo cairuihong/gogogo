@@ -3,11 +3,21 @@ package baiju_order
 import (
 	"fmt"
 	"gogogo/baiju_go_script/public_func"
+	"sync"
+	"time"
 )
+
+type OrderResult struct {
+	Index   int         // 请求序号
+	Success bool        // 是否成功
+	Error   error       // 错误信息
+	Data    interface{} // 响应数据
+}
 
 var resUrl string = "https://iflow-sit.kaboss.cn/in-order-xxl/in/order/inOrderCommit"
 
-func delResData(certificateName, phone, certificateNum, reportIp string) map[string]interface{} {
+// 处理基础请求参数
+func delResData() map[string]interface{} {
 	var resData map[string]interface{} = map[string]interface{}{
 		"sessionId":          public_func.GetUUID(),
 		"iflowApi":           true,
@@ -20,9 +30,9 @@ func delResData(certificateName, phone, certificateNum, reportIp string) map[str
 		"buyPhone":           nil,
 		"extData":            nil,
 		"cacheFlag":          0,
-		"certificateName":    certificateName,
-		"certificateNum":     certificateNum,
-		"phone":              phone,
+		"certificateName":    nil,
+		"certificateNum":     nil,
+		"phone":              nil,
 		"receivingAddress":   "5paw5riv5Lic5Y2X5Liw5rGHOTk55Y+3",
 		"receivingProvince":  "广东省",
 		"receivingCity":      "广州市",
@@ -40,7 +50,7 @@ func delResData(certificateName, phone, certificateNum, reportIp string) map[str
 		"planId":             "baiju",
 		"projectId":          "baiju",
 		"promotionId":        "baiju",
-		"reportIp":           reportIp,
+		"reportIp":           nil,
 		"reportProvince":     "广东省",
 		"reportCity":         "广州市",
 		"feedback":           false,
@@ -75,12 +85,94 @@ func delResData(certificateName, phone, certificateNum, reportIp string) map[str
 	}
 	return resData
 }
-func GeneralOrderCommit() {
-	fmt.Println("通用下单接口地址:", resUrl)
-	certificateName := public_func.GetName(true)
-	phone := public_func.GetPhone(true, true)
-	certificateNum := public_func.GetCertificateNum(true)
-	reportIp := public_func.GetRandomIPv4InChina()
-	fmt.Println(delResData(certificateName, phone, certificateNum, reportIp))
-	// public_func.PublicPost(resUrl, delResData(certificateName))
+
+// 生成订单参数函数
+func generateOrderData(index int) map[string]interface{} {
+	// 基于原始参数创建新的订单参数
+	orderData := make(map[string]interface{})
+	for k, v := range delResData() {
+		orderData[k] = v
+	}
+
+	// 定义部分参数(个性化参数)
+	orderData["certificateName"] = public_func.GetName(true)
+	orderData["phone"] = public_func.GetPhone(true, true)
+	orderData["certificateNum"] = public_func.GetCertificateNum(true)
+	orderData["reportIp"] = public_func.GetRandomIPv4InChina()
+	// fmt.Println(orderData)
+	return orderData
+}
+
+// worker处理函数 (从通道中获取参数并执行下单操作)
+func worker(requests <-chan map[string]interface{}, results chan<- OrderResult) {
+	index := 0
+	for req := range requests {
+		data, err := public_func.PublicPost(resUrl, req)
+		results <- OrderResult{
+			Index:   index,
+			Success: err == nil,
+			Error:   err,
+			Data:    data,
+		}
+		index++
+	}
+}
+
+func GeneralOrderCommit(count int, concurrency int) {
+	/*
+		count : 需要下单的总订单数量
+		concurrency :并发数
+	*/
+	startTime := time.Now()
+	fmt.Println("接口地址:", resUrl)
+
+	// 初始化 下单产品和渠道参数（待补充）
+
+	// 创建带缓冲的channel用于控制并发数
+	requests := make(chan map[string]interface{}, concurrency)
+	results := make(chan OrderResult, count)
+
+	var wg sync.WaitGroup
+
+	for i := 0; i < concurrency; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			worker(requests, results)
+		}()
+	}
+
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	go func() {
+		defer close(requests)
+		for i := 0; i < count; i++ {
+			orderData := generateOrderData(i) // 生成第i个订单参数
+			requests <- orderData
+		}
+	}()
+
+	successCount := 0
+	failCount := 0
+
+	for result := range results {
+		if result.Success {
+			successCount++
+			fmt.Printf(">>>订单 [%d] 下单成功,响应结果:%v\n", result.Index, result.Data)
+		} else {
+			failCount++
+			fmt.Printf(">>>订单 [%d] 下单失败: %v\n", result.Index, result.Error)
+		}
+	}
+	//统计耗时
+	endTime := time.Now()
+	duration := endTime.Sub(startTime).Milliseconds()
+
+	fmt.Printf(">>>>>>批量下单任务完成 , 任务总数：【%d】 \n", successCount+failCount)
+	fmt.Printf(">>>>>>结果：成功数量【%d】 , 失败数量【%d】\n", successCount, failCount)
+	fmt.Printf(">>>>>>耗时：【%v】ms\n", duration)
+
 }

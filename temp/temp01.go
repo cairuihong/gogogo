@@ -93,6 +93,18 @@ func generateOrderData(index int) map[string]interface{} {
 	return orderData
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 // 简化版本的批量下单函数
 func SimpleBatchOrder(count int) {
 	var wg sync.WaitGroup

@@ -9,31 +9,34 @@ import (
 	"net/http"
 )
 
-func PublicPost(resUrl string, resData map[string]interface{}) error {
+func PublicPost(resUrl string, resData map[string]interface{}) (interface{}, error) {
 	jsonData, err := json.Marshal(resData)
 	if err != nil {
-		return fmt.Errorf("marshal failed: %v", err)
+		return nil,fmt.Errorf("marshal failed: %v", err)
 	}
 
 	resp, err := http.Post(resUrl, "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
-		return fmt.Errorf("post failed: %v", err)
+		return nil,fmt.Errorf("post failed: %v", err)
 	}
 	defer resp.Body.Close()
 
 	// 打印接口入参
-	fmt.Printf("接口请求参数: %s\n", string(jsonData))
+	// fmt.Printf("接口请求参数: %s\n", string(jsonData))
 
 	// 读取响应体内容
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return fmt.Errorf("get resp failed: %v", err)
+		return nil,fmt.Errorf("get resp failed: %v", err)
 	}
 
 	// 打印响应结果
-	fmt.Printf("响应结果: %s", string(b))
-
-	return nil
+	// fmt.Printf("响应结果: %s", string(b))
+	var responseData interface{}
+	if err := json.Unmarshal(b, &responseData); err != nil {
+		return nil, fmt.Errorf("unmarshal response failed: %v", err)
+	}
+	return responseData, nil
 }
 
 /*base64 编码*/
