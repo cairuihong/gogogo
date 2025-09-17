@@ -1,0 +1,156 @@
+{
+    "area_data": [
+        {
+            "province_code": "110000",
+            "province": "北京市",
+            "city_list": [
+                {
+                    "city_code": "110100",
+                    "city": "北京市",
+                    "district_list": [
+                        {
+                            "district_code": "110101",
+                            "district": "东城区"
+                        },
+                        {
+                            "district_code": "110102",
+                            "district": "西城区"
+                        },
+                        {
+                            "district_code": "110105",
+                            "district": "朝阳区"
+                        },
+                        {
+                            "district_code": "110106",
+                            "district": "丰台区"
+                        },
+                        {
+                            "district_code": "110107",
+                            "district": "石景山区"
+                        },
+                        {
+                            "district_code": "110108",
+                            "district": "海淀区"
+                        },
+                        {
+                            "district_code": "110109",
+                            "district": "门头沟区"
+                        },
+                        {
+                            "district_code": "110111",
+                            "district": "房山区"
+                        },
+                        {
+                            "district_code": "110112",
+                            "district": "通州区"
+                        },
+                        {
+                            "district_code": "110113",
+                            "district": "顺义区"
+                        },
+                        {
+                            "district_code": "110114",
+                            "district": "昌平区"
+                        },
+                        {
+                            "district_code": "110115",
+                            "district": "大兴区"
+                        },
+                        {
+                            "district_code": "110116",
+                            "district": "怀柔区"
+                        },
+                        {
+                            "district_code": "110117",
+                            "district": "平谷区"
+                        },
+                        {
+                            "district_code": "110118",
+                            "district": "密云区"
+                        },
+                        {
+                            "district_code": "110119",
+                            "district": "延庆区"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "province_code": "120000",
+            "province": "天津市",
+            "city_list": [
+                {
+                    "city_code": "120100",
+                    "city": "天津市",
+                    "district_list": [
+                        {
+                            "district_code": "120101",
+                            "district": "和平区"
+                        },
+                        {
+                            "district_code": "120102",
+                            "district": "河东区"
+                        },
+                        {
+                            "district_code": "120103",
+                            "district": "河西区"
+                        },
+                        {
+                            "district_code": "120104",
+                            "district": "南开区"
+                        },
+                        {
+                            "district_code": "120105",
+                            "district": "河北区"
+                        },
+                        {
+                            "district_code": "120106",
+                            "district": "红桥区"
+                        },
+                        {
+                            "district_code": "120110",
+                            "district": "东丽区"
+                        },
+                        {
+                            "district_code": "120111",
+                            "district": "西青区"
+                        },
+                        {
+                            "district_code": "120112",
+                            "district": "津南区"
+                        },
+                        {
+                            "district_code": "120113",
+                            "district": "北辰区"
+                        },
+                        {
+                            "district_code": "120114",
+                            "district": "武清区"
+                        },
+                        {
+                            "district_code": "120115",
+                            "district": "宝坻区"
+                        },
+                        {
+                            "district_code": "120116",
+                            "district": "滨海新区"
+                        },
+                        {
+                            "district_code": "120117",
+                            "district": "宁河区"
+                        },
+                        {
+                            "district_code": "120118",
+                            "district": "静海区"
+                        },
+                        {
+                            "district_code": "120119",
+                            "district": "蓟州区"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

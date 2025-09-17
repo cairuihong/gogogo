@@ -1,0 +1,15 @@
+{
+    "bizParams": {
+        "status": 200,
+        "msg": "失败订单mock！！"
+    },
+    "head": {
+        "code": "0000",
+        "method": "jujie.hub.broadband.orderSync",
+        "peerId": "",
+        "responseTime": "2022-12-06 10:44:07",
+        "transactionId": "4CUy8E0SQUK8iQCK22yMw_",
+        "version": "4.0",
+        "sign": ""
+    }
+}
