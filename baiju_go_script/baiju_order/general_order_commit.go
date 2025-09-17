@@ -18,7 +18,8 @@ type OrderResult struct {
 	Data    interface{} // 响应数据
 }
 
-var resUrl string = "https://iflow-sit.kaboss.cn/in-order-xxl/in/order/inOrderCommit"
+// var resUrl string = "https://iflow-sit.kaboss.cn/in-order-xxl/in/order/inOrderCommit"
+var resUrl string = "https://iflow-pre.kaboss.cn/in-order-xxl/in/order/inOrderCommit"
 
 // 处理基础请求参数
 func delResData() map[string]interface{} {
@@ -117,7 +118,7 @@ func generateOrderData(index int, pageUrl string) map[string]interface{} {
 	// 用户信息
 	orderData["certificateName"] = public_func.GetName(true)
 	orderData["phone"] = public_func.GetPhone(true, true)
-	orderData["certificateNum"] = public_func.GetCertificateNumByGenderAndAge(true, 1, 18)
+	orderData["certificateNum"] = public_func.GetCertificateNumByGenderAndAge(true, 2, 31)
 	orderData["reportIp"] = public_func.GetRandomIPv4InChina()
 	// 投放参数
 	orderData["clickId"] = public_func.GetUUID()
@@ -145,11 +146,17 @@ func worker(requests <-chan map[string]interface{}, results chan<- OrderResult) 
 	}
 }
 
+func del_page_url(pageUrl string) {
+	fmt.Println("解析推广链接中...")
+	fmt.Println(pageUrl)
+}
+
 func GeneralOrderCommit(count int, concurrency int, pageUrl string) {
 	/*
 		count : 需要下单的总订单数量
 		concurrency :并发数
 	*/
+	del_page_url(pageUrl)
 	startTime := time.Now()
 	fmt.Printf("计划下单数量：【%d】,并发数:【%d】\n", count, concurrency)
 	fmt.Println("接口地址:", resUrl)

@@ -6,5 +6,6 @@ import (
 
 func main() {
 
-	study_case.GinBaseCase()
+	// study_case.GinBaseCase()
+	study_case.GinSqlCase()
 }
