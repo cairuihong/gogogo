@@ -257,7 +257,7 @@ func GetCertificateNum(isBase64 bool) string {
 	return certificateNum
 }
 
-// 新增：根据指定性别和年龄生成身份证号码
+// 根据指定性别和年龄生成身份证号码 gender 1-男 2-女
 func GetCertificateNumByGenderAndAge(isBase64 bool, gender int, age int) string {
 	// 查找并加载地区数据
 	areaDataPath, err := findAreaCodeFile()
