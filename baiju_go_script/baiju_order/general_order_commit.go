@@ -6,9 +6,17 @@ import (
 	"fmt"
 	"gogogo/baiju_go_script/public_func"
 	"regexp"
+	"strings"
 	"sync"
 	"time"
 )
+
+// 定义推广链信息结构体
+type PageUrlInfo struct {
+	Env       string //环境
+	ChannelId string // 渠道ID
+	PageId    string // 营销页ID
+}
 
 // 定义下单结果结构体
 type OrderResult struct {
@@ -18,10 +26,33 @@ type OrderResult struct {
 	Data    interface{} // 响应数据
 }
 
-// var resUrl string = "https://iflow-sit.kaboss.cn/in-order-xxl/in/order/inOrderCommit"
-var resUrl string = "https://iflow-pre.kaboss.cn/in-order-xxl/in/order/inOrderCommit"
+// 推广链信息解析函数
+func del_page_url(pageUrl string) PageUrlInfo {
+	fmt.Println("解析推广链接中...")
+	var pageInfo PageUrlInfo
+	//判断推广链所属环境
+	if strings.Contains(pageUrl, "sit") {
+		pageInfo.Env = "sit"
+	} else if strings.Contains(pageUrl, "pre") {
+		pageInfo.Env = "pre"
+	}
+	// 提取营销页ID
+	idRegex := regexp.MustCompile(`[?&]id=([^&]*)`)
+	idMatches := idRegex.FindStringSubmatch(pageUrl)
+	if len(idMatches) > 1 {
+		pageInfo.PageId = idMatches[1] // 营销页ID
+	}
+	// 提取渠道ID
+	channelIdRegex := regexp.MustCompile(`[?&]channelId=([^&]*)`)
+	channelIdMatches := channelIdRegex.FindStringSubmatch(pageUrl)
+	if len(channelIdMatches) > 1 {
+		pageInfo.ChannelId = channelIdMatches[1] // 渠道ID
+	}
+	fmt.Printf("解析完成，环境:【%s】,营销页ID:【%s】,渠道ID:【%s】\n", pageInfo.Env, pageInfo.PageId, pageInfo.ChannelId)
+	return pageInfo
+}
 
-// 处理基础请求参数
+// 初始化基础请求参数
 func delResData() map[string]interface{} {
 	var resData map[string]interface{} = map[string]interface{}{
 		"sessionId":          public_func.GetUUID(),
@@ -91,8 +122,8 @@ func delResData() map[string]interface{} {
 	return resData
 }
 
-// 生成订单参数函数
-func generateOrderData(index int, pageUrl string) map[string]interface{} {
+// 加工生成订单参数函数
+func generateOrderData(index int, pageUrl, pageId, channelId string) map[string]interface{} {
 	// 基于原始参数创建新的订单参数
 	orderData := make(map[string]interface{})
 	for k, v := range delResData() {
@@ -102,22 +133,12 @@ func generateOrderData(index int, pageUrl string) map[string]interface{} {
 	// 定义部分参数(个性化参数)
 	//进单渠道，产品信息
 	orderData["pageUrl"] = pageUrl
-	// 提取营销页ID
-	idRegex := regexp.MustCompile(`[?&]id=([^&]*)`)
-	idMatches := idRegex.FindStringSubmatch(pageUrl)
-	if len(idMatches) > 1 {
-		orderData["pageId"] = idMatches[1] // 营销页ID
-	}
-	// 提取渠道ID
-	channelIdRegex := regexp.MustCompile(`[?&]channelId=([^&]*)`)
-	channelIdMatches := channelIdRegex.FindStringSubmatch(pageUrl)
-	if len(channelIdMatches) > 1 {
-		orderData["channelId"] = channelIdMatches[1] // 渠道ID
-	}
+	orderData["pageId"] = pageId       // 营销页ID
+	orderData["channelId"] = channelId // 渠道ID
 
 	// 用户信息
-	orderData["certificateName"] = public_func.GetName(true)
 	orderData["phone"] = public_func.GetPhone(true, true)
+	orderData["certificateName"] = public_func.GetName(true)
 	orderData["certificateNum"] = public_func.GetCertificateNumByGenderAndAge(true, 2, 31)
 	orderData["reportIp"] = public_func.GetRandomIPv4InChina()
 	// 投放参数
@@ -127,12 +148,12 @@ func generateOrderData(index int, pageUrl string) map[string]interface{} {
 	orderData["receivingProvince"] = address.Province
 	orderData["receivingCity"] = address.City
 	orderData["receivingDistrict"] = address.District
-	// fmt.Println(orderData)
+
 	return orderData
 }
 
-// worker处理函数 (从通道中获取参数并执行下单操作)
-func worker(requests <-chan map[string]interface{}, results chan<- OrderResult) {
+// worker处理函数 (从通道中获取参数，请求下单接口)
+func worker(resUrl string, requests <-chan map[string]interface{}, results chan<- OrderResult) {
 	index := 0
 	for req := range requests {
 		data, err := public_func.PublicPost(resUrl, req)
@@ -146,20 +167,18 @@ func worker(requests <-chan map[string]interface{}, results chan<- OrderResult) 
 	}
 }
 
-func del_page_url(pageUrl string) {
-	fmt.Println("解析推广链接中...")
-	fmt.Println(pageUrl)
-}
-
+// 并发下单
 func GeneralOrderCommit(count int, concurrency int, pageUrl string) {
 	/*
 		count : 需要下单的总订单数量
 		concurrency :并发数
 	*/
-	del_page_url(pageUrl)
+	pageInfo := del_page_url(pageUrl)
+	resUrl := fmt.Sprintf("https://iflow-%s.kaboss.cn/in-order-xxl/in/order/inOrderCommit", pageInfo.Env)
+	fmt.Println("接口地址:", resUrl)
 	startTime := time.Now()
 	fmt.Printf("计划下单数量：【%d】,并发数:【%d】\n", count, concurrency)
-	fmt.Println("接口地址:", resUrl)
+	// fmt.Println("接口地址:", resUrl)
 
 	// 创建带缓冲的channel用于控制并发数
 	requests := make(chan map[string]interface{}, concurrency)
@@ -171,7 +190,7 @@ func GeneralOrderCommit(count int, concurrency int, pageUrl string) {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			worker(requests, results)
+			worker(resUrl, requests, results)
 		}()
 	}
 
@@ -183,7 +202,7 @@ func GeneralOrderCommit(count int, concurrency int, pageUrl string) {
 	go func() {
 		defer close(requests)
 		for i := 0; i < count; i++ {
-			orderData := generateOrderData(i, pageUrl) // 生成第i个订单参数
+			orderData := generateOrderData(i, pageUrl, pageInfo.PageId, pageInfo.ChannelId) // 生成第i个订单参数
 			requests <- orderData
 		}
 	}()
@@ -213,7 +232,6 @@ func GeneralOrderCommit(count int, concurrency int, pageUrl string) {
 	minutes := (totalSeconds % 3600) / 60
 	seconds := totalSeconds % 60
 	fmt.Printf(">>>>>>耗时：【%d小时%d分%d秒】\n", hours, minutes, seconds)
-
 	fmt.Printf(">>>>>>批量下单任务完成 , 任务总数：【%d】 \n", successCount+failCount)
 	fmt.Printf(">>>>>>结果：成功数量【%d】 , 失败数量【%d】\n", successCount, failCount)
 

@@ -79,7 +79,7 @@ func GetName(isBase64 bool) string {
 	return name
 }
 
-/*生成测试手机号*/
+/*生成测试手机号, 第一个bool为是否进行base64编码，第二个bool为是否白名单手机号*/
 func GetPhone(isBase64, isWhiteList bool) string {
 	var phone string
 	// 中国手机号前缀
@@ -257,7 +257,7 @@ func GetCertificateNum(isBase64 bool) string {
 	return certificateNum
 }
 
-// 根据指定性别和年龄生成身份证号码 gender 1-男 2-女
+// 根据指定性别和年龄生成身份证号码 (isBase64-是否base64加密,  gender 0-不限制 1-男 2-女, age 指定身份证年龄)
 func GetCertificateNumByGenderAndAge(isBase64 bool, gender int, age int) string {
 	// 查找并加载地区数据
 	areaDataPath, err := findAreaCodeFile()
